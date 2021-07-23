@@ -1,0 +1,19 @@
+{
+  "name": "masked",
+  "version": "1.0.0",
+  "description": "자동 출석명부",
+  "main": "index.js",
+  "scripts": {
+    "dist": "electron-builder",
+    "deploy": "electron-builder build -p always",
+    "run": "electron index.js"
+  },
+  "dependencies": {
+    "electron-settings": "^4.0.2",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "electron": "^10.1.1",
+    "electron-builder": "^22.8.0"
+  }
+}

@@ -1,0 +1,249 @@
+<!Doctype html>
+<html>
+
+<head>
+    <title>인공지능 명부</title>
+    <link href="./css/frameLess.css" rel="stylesheet" type="text/css">
+    <link href="./css/main.css" rel="stylesheet" type="text/css">
+    <script src="./js/frameLess.js"></script>
+    <script src="./js/main.js"></script>
+    <script src="./js/material-components-web.min.js"></script>
+    <link href="./css/material-components-web.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
+<body>
+    <header id="titlebar">
+        <div id="drag-region">
+            <div id="window-title">
+                <span id="appTitle">명부</span>
+            </div>
+            <div id="window-controls">
+                <div class="control-btn" id="min-button">
+                    <span>&#xE921;</span>
+                </div>
+                <div class="control-btn" id="max-button">
+                    <span>&#xE922;</span>
+                </div>
+                <div class="control-btn" id="restore-button">
+                    <span>&#xE923;</span>
+                </div>
+                <div class="control-btn" id="close-button">
+                    <span>&#xE8BB;</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div id="body">
+        <div id="main">
+            <img id="temp" style="height: 200px;position: fixed;top:32px;">
+            <video autoplay="true" id="videoElement" style="width:100%;height: 100%;object-fit: cover;" muted>
+
+            </video>
+        </div>
+        <div id="sidebar">
+            <ul class="mdc-list mdc-list--two-line" id="list"></ul>
+        </div>
+    </div>
+    <div class="mdc-dialog">
+        <div class="mdc-dialog__container">
+            <div aria-describedby="my-dialog-content" aria-labelledby="my-dialog-title" aria-modal="true"
+                class="mdc-dialog__surface" role="alertdialog">
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    <img id="new"
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzyALOcLp4ykOIC4bim8L0xZIvgfLLZEo-mg&amp;usqp=CAU"
+                        style="width: 50px;height: 50px;object-fit: cover;border-radius: 100px;float: left;">
+                    <h2 style="float: left;margin-top: 10px;margin-bottom: 40px;margin-left: 10px;">추가할 사용자의 이름을 입력하세요.
+                    </h2>
+                    <br>
+                    <label class="mdc-text-field mdc-text-field--filled mdc-ripple-upgraded" id="name-container"
+                        style="width: 100%; --mdc-ripple-fg-size:176px; --mdc-ripple-fg-scale:1.75821; --mdc-ripple-fg-translate-start:65.8875px, -53.3px; --mdc-ripple-fg-translate-end:59.0813px, -60px;">
+                        <span class="mdc-text-field__ripple"></span>
+                        <span class="mdc-floating-label">이름</span>
+                        <input class="mdc-text-field__input" id="name" type="text">
+                        <span class="mdc-line-ripple" style="transform-origin: 137.087px center;"></span>
+                    </label>
+                </div>
+                <div class="mdc-dialog__actions">
+                    <button class="mdc-button mdc-dialog__button" data-mdc-dialog-action="cancel" type="button">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">취소</span>
+                    </button>
+                    <button class="mdc-button mdc-dialog__button" data-mdc-dialog-action="discard" onclick="register()"
+                        type="button">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">추가</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+    <div class="mdc-dialog" id="dialog2">
+        <div class="mdc-dialog__container">
+            <div aria-describedby="my-dialog-content" aria-labelledby="my-dialog-title" aria-modal="true"
+                class="mdc-dialog__surface" role="alertdialog">
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    <img id="new"
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzyALOcLp4ykOIC4bim8L0xZIvgfLLZEo-mg&amp;usqp=CAU"
+                        style="width: 50px;height: 50px;object-fit: cover;border-radius: 100px;float: left;">
+                    <h2 style="float: left;margin-top: 10px;margin-bottom: 40px;margin-left: 10px;">추가 중... 잠시만 기다리세요.
+                    </h2>
+                    <br>
+                    <div role="progressbar" class="mdc-linear-progress fade"
+                        style="width:100%;z-index:1000;--mdc-theme-primary:#8cc4de;" id="iProg">
+                        <div class="mdc-linear-progress__buffering-dots"></div>
+                        <div class="mdc-linear-progress__buffer" style="background-color: #dddddd;"></div>
+                        <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+                            <span class="mdc-linear-progress__bar-inner"></span>
+                        </div>
+                        <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+                            <span class="mdc-linear-progress__bar-inner"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+    <div class="mdc-dialog" id="dialog3">
+        <div class="mdc-dialog__container">
+            <div aria-describedby="my-dialog-content" aria-labelledby="my-dialog-title" aria-modal="true"
+                class="mdc-dialog__surface" role="alertdialog">
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    <h2 style="float: left;margin-top: 10px;margin-bottom: 40px;margin-left: 10px;">백엔드 서비스를 시작하고 있어요.
+                    </h2>
+                    <br>
+                    <div role="progressbar" class="mdc-linear-progress fade"
+                        style="width:100%;z-index:1000;--mdc-theme-primary:#8cc4de;" id="prog2">
+                        <div class="mdc-linear-progress__buffering-dots"></div>
+                        <div class="mdc-linear-progress__buffer" style="background-color: #dddddd;"></div>
+                        <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+                            <span class="mdc-linear-progress__bar-inner"></span>
+                        </div>
+                        <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+                            <span class="mdc-linear-progress__bar-inner"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+    <div class="mdc-dialog" id="dialog4">
+        <div class="mdc-dialog__container">
+            <div aria-describedby="my-dialog-content" aria-labelledby="my-dialog-title" aria-modal="true"
+                class="mdc-dialog__surface" role="alertdialog">
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    <h2 style="float: left;margin-top: 10px;margin-bottom: 40px;margin-left: 10px;">등록된 얼굴
+                    </h2>
+                    <ul class="mdc-list" style="display: inline-block;width: 100%;margin-top: -30px;" id="li-add">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+
+    <div class="mdc-dialog" id="dialog5">
+        <div class="mdc-dialog__container">
+            <div aria-describedby="my-dialog-content" aria-labelledby="my-dialog-title" aria-modal="true"
+                class="mdc-dialog__surface" role="alertdialog">
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    <img id="new"
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzyALOcLp4ykOIC4bim8L0xZIvgfLLZEo-mg&amp;usqp=CAU"
+                        style="width: 50px;height: 50px;object-fit: cover;border-radius: 100px;float: left;">
+                    <h2 style="float: left;margin-top: 10px;margin-bottom: 40px;margin-left: 10px;">변경할 이름을 입력하세요.
+                    </h2>
+                    <br>
+                    <label class="mdc-text-field mdc-text-field--filled mdc-ripple-upgraded" id="cname-container"
+                        style="width: 100%; --mdc-ripple-fg-size:176px; --mdc-ripple-fg-scale:1.75821; --mdc-ripple-fg-translate-start:65.8875px, -53.3px; --mdc-ripple-fg-translate-end:59.0813px, -60px;">
+                        <span class="mdc-text-field__ripple"></span>
+                        <span class="mdc-floating-label">이름</span>
+                        <input class="mdc-text-field__input" id="cname" type="text">
+                        <span class="mdc-line-ripple" style="transform-origin: 137.087px center;"></span>
+                    </label>
+                </div>
+                <div class="mdc-dialog__actions">
+                    <button class="mdc-button mdc-dialog__button" data-mdc-dialog-action="cancel" type="button">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">취소</span>
+                    </button>
+                    <button class="mdc-button mdc-dialog__button" data-mdc-dialog-action="discard"
+                        onclick="change_name()" type="button">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">변경</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+    <div class="mdc-dialog" id="dialog6">
+        <div class="mdc-dialog__container">
+            <div aria-describedby="my-dialog-content" aria-labelledby="my-dialog-title" aria-modal="true"
+                class="mdc-dialog__surface" role="alertdialog">
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    <h2 style="float: left;margin-top: 10px;margin-bottom: 40px;margin-left: 10px;">작업 중...
+                    </h2>
+                    <br>
+                    <div role="progressbar" class="mdc-linear-progress fade"
+                        style="width:100%;z-index:1000;--mdc-theme-primary:#8cc4de;" id="prog3">
+                        <div class="mdc-linear-progress__buffering-dots"></div>
+                        <div class="mdc-linear-progress__buffer" style="background-color: #dddddd;"></div>
+                        <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+                            <span class="mdc-linear-progress__bar-inner"></span>
+                        </div>
+                        <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+                            <span class="mdc-linear-progress__bar-inner"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+    
+    <div class="mdc-dialog" id="dialog7">
+        <div class="mdc-dialog__container">
+            <div aria-describedby="my-dialog-content" aria-labelledby="my-dialog-title" aria-modal="true"
+                class="mdc-dialog__surface" role="alertdialog">
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    <h2 style="float: left;margin-top: 10px;margin-bottom: 40px;margin-left: 10px;">이상 체온이 감지되었어요!
+                    </h2>
+                    <ul class="mdc-list" style="display: inline-block;width: 100%;margin-top: -30px;" id="li-err">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+    <div class="mdc-snackbar">
+        <div aria-relevant="additions" class="mdc-snackbar__surface" role="status">
+            <div aria-atomic="false" class="mdc-snackbar__label" id="snackbar-text"></div>
+            <div aria-atomic="true" class="mdc-snackbar__actions">
+                <button class="mdc-button mdc-snackbar__action" type="button">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label">닫기</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="mdc-touch-target-wrapper" style="position: fixed;right: 10px;bottom: 10px;">
+        <button class="mdc-fab mdc-fab--mini mdc-fab--touch" onclick="openRegister();">
+            <div class="mdc-fab__ripple"></div>
+            <span class="material-icons mdc-fab__icon">add</span>
+            <div class="mdc-fab__touch"></div>
+        </button>
+    </div>
+    <div class="mdc-touch-target-wrapper" style="position: fixed;left: 10px;bottom: 10px;">
+        <button class="mdc-fab mdc-fab--mini mdc-fab--touch" onclick="showUser();">
+            <div class="mdc-fab__ripple"></div>
+            <span class="material-icons mdc-fab__icon">account_circle</span>
+            <div class="mdc-fab__touch"></div>
+        </button>
+    </div>
+    <canvas id="canv" style="opacity: 0;"></canvas>
+</body>
+
+</html>
